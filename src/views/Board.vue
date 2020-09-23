@@ -28,6 +28,9 @@
         </div>
       </div>
     </div>
+    <div class="task-bg">
+      <router-view />
+    </div>
   </div>
 </template>
 
