@@ -5,9 +5,11 @@
         class="column"
         v-for="(column, columnIndex) of board.columns"
         :key="columnIndex"
+        draggable
         @drop="moveTask($event, column.tasks)"
         @dragover.prevent
         @dragenter.prevent
+        @dragstart.self="pickupColumn($event, columnIndex)"
       >
         <div class="flex items-center mb-2 font-bold">
           {{ column.name }}
@@ -77,7 +79,14 @@
       pickupTask(e, taskIndex, fromColumnIndex){
         e.dataTransfer.effectAllowed = 'move'
         e.dataTransfer.dropEffect = 'move'
+
         e.dataTransfer.setData('task-index', taskIndex)
+        e.dataTransfer.setData('from-column-index', fromColumnIndex)
+      },
+      pickupColumn(e, fromColumnIndex){
+        e.dataTransfer.effectAllowed = 'move'
+        e.dataTransfer.dropEffect = 'move'
+
         e.dataTransfer.setData('from-column-index', fromColumnIndex)
       },
       moveTask(e, toTasks){
