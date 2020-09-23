@@ -22,6 +22,9 @@
             draggable
             @dragstart="pickupTask($event, taskIndex, columnIndex)"
             @click="goToTask(task)"
+            @dragover.prevent
+            @dragenter.prevent
+            @drop="moveTask($event, column.tasks, taskIndex)"
           >
             <span class="w-full flex-no-shrink font-bold">
               {{ task.name }}
@@ -76,11 +79,11 @@
         })
         e.target.value = ''
       },
-      pickupTask(e, taskIndex, fromColumnIndex){
+      pickupTask(e, fromTaskIndex, fromColumnIndex){
         e.dataTransfer.effectAllowed = 'move'
         e.dataTransfer.dropEffect = 'move'
 
-        e.dataTransfer.setData('task-index', taskIndex)
+        e.dataTransfer.setData('from-task-index', fromTaskIndex)
         e.dataTransfer.setData('type', 'task')
         e.dataTransfer.setData('from-column-index', fromColumnIndex)
       },
@@ -100,13 +103,14 @@
           this.moveColumn(e, toColumnIndex)
         }
       },
-      moveTask(e, toTasks){
+      moveTask(e, toTasks, toTaskIndex){
         const fromColumnIndex = e.dataTransfer.getData('from-column-index')
         const fromTasks = this.board.columns[fromColumnIndex].tasks
         this.$store.commit('MOVE_TASK', {
           fromTasks,
           toTasks,
-          taskIndex: e.dataTransfer.getData('task-index')
+          fromTaskIndex: e.dataTransfer.getData('from-task-index'),
+          toTaskIndex
         })
       },
       moveColumn (e, toColumnIndex) {
