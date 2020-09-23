@@ -24,7 +24,7 @@
             @click="goToTask(task)"
             @dragover.prevent
             @dragenter.prevent
-            @drop="moveTask($event, column.tasks, taskIndex)"
+            @drop.stop="moveTask($event, column.tasks, taskIndex)"
           >
             <span class="w-full flex-no-shrink font-bold">
               {{ task.name }}
