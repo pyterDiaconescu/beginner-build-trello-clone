@@ -1,15 +1,13 @@
 <template>
-  <AppDragg
-    :transferData="{
-      type: 'column',
-      fromColumnIndex: columnIndex
-    }"
+  <AppDrop
+    @drop="moveTaskOrColumn"
   >
-    <div
+    <AppDragg
+      :transferData="{
+        type: 'column',
+        fromColumnIndex: columnIndex
+      }"
       class="column"
-      @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
-      @dragover.prevent
-      @dragenter.prevent
     >
       <div class="flex items-center mb-2 font-bold">
         {{ column.name }}
@@ -31,19 +29,21 @@
           @keyup.enter="createTask($event, column.tasks)"
         >
       </div>
-    </div>
-  </AppDragg>
+    </AppDragg>
+  </AppDrop>
 </template>
 
 <script>
   import ColumnTask from '@/components/ColumnTask'
   import movingTasksAndColumnsMixin from '@/mixins/movingTasksAndColumnsMixin'
   import AppDragg from '@/components/AppDragg'
+  import AppDrop from '@/components/AppDrop'
 
   export default {
     components: {
       ColumnTask,
-      AppDragg
+      AppDragg,
+      AppDrop
     },
     mixins: [movingTasksAndColumnsMixin],
     methods: {
